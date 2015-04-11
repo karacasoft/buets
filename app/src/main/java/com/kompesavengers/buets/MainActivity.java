@@ -19,8 +19,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.kompesavengers.buets.fragments.AkisFragment;
 
 
@@ -28,8 +33,18 @@ public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        
+        LatLng sydney = new LatLng(-33.867, 151.206);
+
+        googleMap.setMyLocationEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+
+        googleMap.addMarker(new MarkerOptions()
+                .title("Sydney")
+                .snippet("The most populous city in Australia.")
+                .position(sydney));
     }
+
+
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -40,11 +55,14 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -57,15 +75,28 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if(mapFragment == null){
+            mapFragment = new SupportMapFragment();
+        }
+
         switch (position)
         {
             case 0:
+                mapFragment.getMapAsync(this);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, mapFragment)
+                        .commit();
+                break;
+            case 1:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, AkisFragment.newInstance())
                         .commit();
