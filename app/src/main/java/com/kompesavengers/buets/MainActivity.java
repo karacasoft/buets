@@ -40,9 +40,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        events = new ArrayList<Event>();
-        events = getEvents();
-
         LatLng sydney = new LatLng(-33.867, 151.206);
 
         googleMap.setMyLocationEnabled(true);
@@ -122,7 +119,9 @@ public class MainActivity extends ActionBarActivity
         switch (position)
         {
             case 0:
-                mapFragment.getMapAsync(this);
+                events = new ArrayList<Event>();
+                events = getEvents();
+
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, mapFragment)
                         .commit();
