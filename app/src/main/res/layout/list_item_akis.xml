@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/event_list_logo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_drawer"
+        android:layout_above="@+id/event_details_button" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/details"
+        android:id="@+id/event_details_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:textStyle="bold"
+        android:textSize="@dimen/akis_text_title_size"
+        android:id="@+id/event_title"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/event_list_logo"
+        android:layout_toEndOf="@+id/event_list_logo"
+        android:padding="5dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:textColor="#333333"
+        android:id="@+id/event_date"
+        android:layout_below="@+id/event_title"
+        android:layout_toRightOf="@+id/event_list_logo"
+        android:layout_toEndOf="@+id/event_list_logo"
+        android:padding="5dp"
+        android:layout_above="@+id/event_organizer" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/event_organizer"
+        android:padding="5dp"
+        android:layout_above="@+id/event_details_button"
+        android:layout_toRightOf="@+id/event_list_logo"
+        android:layout_toEndOf="@+id/event_list_logo" />
+
+</RelativeLayout>
