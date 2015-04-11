@@ -27,12 +27,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kompesavengers.buets.fragments.AkisFragment;
+import com.kompesavengers.buets.model.Event;
+import com.kompesavengers.buets.model.Place;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, OnMapReadyCallback {
+
+    private ArrayList<Event> events;
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        events = new ArrayList<Event>();
+        events = getEvents();
+
         LatLng sydney = new LatLng(-33.867, 151.206);
 
         googleMap.setMyLocationEnabled(true);
@@ -44,7 +54,28 @@ public class MainActivity extends ActionBarActivity
                 .position(sydney));
     }
 
+    private ArrayList<Event> getEvents()
+    {
+        ArrayList<Event> events = new ArrayList<Event>();
 
+        Event event = new Event();
+        event.setId(1);
+        event.setDetail("burası detay");
+        event.setName("bilişim ödü");
+        event.setStartDate("09.04.2015");
+        event.setEndDate("12.04.2015");
+        event.setOrganizerId(1);
+        Place place = new Place();
+        place.setName("GKM");
+        place.setCoordLat(41.085852F);
+        place.setCoordLong(29.039144F);
+        event.setPlace(place);
+        event.setUrl("compec.boun.edu.tr/exit15");
+
+        events.add(event);
+
+        return events;
+    }
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
