@@ -19,11 +19,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.kompesavengers.buets.fragments.AkisFragment;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, OnMapReadyCallback {
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        
+    }
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
