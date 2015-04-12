@@ -4,38 +4,30 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
-import android.opengl.Visibility;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kompesavengers.buets.api.EventsRequest;
 import com.kompesavengers.buets.api.Request;
+import com.kompesavengers.buets.api.TagsRequest;
 import com.kompesavengers.buets.fragments.AkisFragment;
 import com.kompesavengers.buets.fragments.SingleEventFragment;
 import com.kompesavengers.buets.model.Event;
-import com.kompesavengers.buets.model.Place;
+import com.kompesavengers.buets.model.Tag;
 
 import java.util.ArrayList;
 
@@ -47,6 +39,7 @@ public class MainActivity extends ActionBarActivity
     {
 
     private ArrayList<Event> events;
+    private ArrayList<Tag> tags;
     private View spinner;
 
         @Override
@@ -73,13 +66,12 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
-    private void getEvents()
+    private void startEventsRequest()
     {
         EventsRequest eventsRequest = (EventsRequest) new EventsRequest()
                 .setCallback(new Request.RequestCallback() {
                     @Override
                     public void onRequest() {
-                        //TODO show loading icon
                         spinnerVisibility(View.VISIBLE);
                     }
 
@@ -106,6 +98,32 @@ public class MainActivity extends ActionBarActivity
                     }
                 });
         eventsRequest.execute();
+    }
+
+    public void startTagsRequest()
+    {
+        TagsRequest tagsRequest = (TagsRequest) new TagsRequest()
+                .setCallback(new Request.RequestCallback() {
+                    @Override
+                    public void onRequest() {}
+
+                    @Override
+                    public void onResult(int errorCode, final String errorString, ArrayList array) {
+                        if(errorCode == 0)
+                        {
+                            tags.clear();
+                            tags.addAll(array);
+                        }else{
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showError("Hata", errorString);
+                                }
+                            });
+                        }
+                    }
+                });
+        tagsRequest.execute();
     }
 
     public void spinnerVisibility(int visibility)
@@ -179,7 +197,7 @@ public class MainActivity extends ActionBarActivity
         {
             case 0:
                 events = new ArrayList<Event>();
-                getEvents();
+                startEventsRequest();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, mapFragment)
                         .commit();
