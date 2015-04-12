@@ -217,7 +217,7 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, FilterFragment.newInstance())
+                .replace(R.id.container, SingleEventFragment.newInstance(e))
                 .addToBackStack("list")
                 .commit();
     }
