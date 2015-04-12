@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,9 +24,6 @@ public class AkisFragment extends Fragment {
 
     private ArrayList<Event> events = new ArrayList<>();
     private LinearLayout eventsLayout;
-
-    private OnEventClickListener onEventClickListener;
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -62,19 +57,6 @@ public class AkisFragment extends Fragment {
         startFeedRequest();
 
         return v;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try
-        {
-            this.onEventClickListener = (OnEventClickListener) activity;
-        }catch (ClassCastException e)
-        {
-            Log.w("AkisFragment", "The caller Activity must implement" +
-                    "OnEventClickListener interface.");
-        }
     }
 
     private void startFeedRequest()
@@ -129,7 +111,7 @@ public class AkisFragment extends Fragment {
 
     private void populateView()
     {
-        for(final Event e : events)
+        for(Event e : events)
         {
             View v = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_akis, this.eventsLayout, false);
 
@@ -137,31 +119,14 @@ public class AkisFragment extends Fragment {
             TextView eventDate = (TextView) v.findViewById(R.id.event_date);
             TextView eventDateEnd = (TextView) v.findViewById(R.id.event_date_end);
             TextView eventOrganizer = (TextView) v.findViewById(R.id.event_organizer);
-            Button eventDetails = (Button) v.findViewById(R.id.event_details_button);
 
             eventTitle.setText(e.getName());
             eventDate.setText("Başlangıç Tarihi: " + e.getStartDate());
             eventDateEnd.setText("Bitiş Tarihi: " + e.getEndDate());
             eventOrganizer.setText(String.valueOf(e.getOrganizerId()));
 
-            eventDetails.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(AkisFragment.this.onEventClickListener != null)
-                    {
-                        AkisFragment.this.onEventClickListener.onEventClick(e);
-                    }
-                }
-            });
-
-
             this.eventsLayout.addView(v);
         }
-    }
-
-    public interface OnEventClickListener
-    {
-        public void onEventClick(Event e);
     }
 
 
