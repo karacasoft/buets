@@ -68,8 +68,43 @@ public class MainActivity extends ActionBarActivity
 
     public boolean isBetween(Date filter,Date date)
     {
-        //TODO isBetween
-        return true;
+        boolean dateEndFilterStart, dateStartFilterEnd;
+
+        // date ends before filter begins FALSE
+        if(filter.getStartYear() > date.getEndYear())
+            dateEndFilterStart = false;
+        else if(filter.getStartYear() < date.getEndYear())
+            dateEndFilterStart = true;
+        else if(filter.getStartMonth() > date.getEndMonth())//same year
+            dateEndFilterStart = false;
+        else if(filter.getStartMonth() < date.getEndMonth())
+            dateEndFilterStart = true;
+        else if(filter.getStartDay() > date.getEndDay())//same month
+            dateEndFilterStart = false;
+        else if(filter.getStartDay() < date.getEndDay())
+            dateEndFilterStart = true;
+        else //same day
+            dateEndFilterStart = true;
+
+        // date starts after filter ends
+        if(date.getStartDay() > filter.getEndYear())
+            dateStartFilterEnd = false;
+        else if(date.getStartYear() < filter.getEndYear())
+            dateStartFilterEnd = true;
+        else if(date.getStartMonth() > filter.getEndMonth())//same year
+            dateStartFilterEnd = false;
+        else if(date.getStartMonth() < filter.getEndMonth())
+            dateStartFilterEnd = true;
+        else if(date.getStartDay() > filter.getEndDay())//same month
+            dateStartFilterEnd= false;
+        else if(date.getStartDay() < filter.getEndDay())
+            dateStartFilterEnd = true;
+        else //same day
+            dateStartFilterEnd = true;
+
+        if(dateEndFilterStart ||dateStartFilterEnd)
+            return true;
+        return false;
     }
 
     public ArrayList<Tag> getTags() {
