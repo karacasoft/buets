@@ -1,6 +1,9 @@
 package com.kompesavengers.buets.fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -59,12 +62,79 @@ public class FilterFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_filter, container, false);
 
-        DatePicker startDatePicker = (DatePicker) v.findViewById(R.id.filterDateStart);
-        DatePicker endDatePicker = (DatePicker) v.findViewById(R.id.filterDateEnd);
+        final DatePicker startDatePicker = new DatePicker(getActivity());
+        final DatePicker endDatePicker = new DatePicker(getActivity());
+
+        if(Build.VERSION.SDK_INT >= 11) {
+            startDatePicker.setCalendarViewShown(false);
+            endDatePicker.setCalendarViewShown(false);
+        }
+
+        final Button startDatePickerButton = (Button) v.findViewById(R.id.filterStartDateButton);
+        final Button endDatePickerButton = (Button) v.findViewById(R.id.filterEndDateButton);
+
         Button filtersAreOkButton = (Button) v.findViewById(R.id.filters_are_ok_button);
 
+        final AlertDialog.Builder builderstart = new AlertDialog.Builder(getActivity());
+        builderstart.setTitle("Başlangıç Tarihi Seç")
+                .setView(startDatePicker)
+                .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        filter.setStartDateFilterActive(true);
+                        startDatePickerButton.setText("Başlangıç Tarihi: " +
+                                startDatePicker.getYear() + "-" + (startDatePicker.getMonth() + 1)
+                                + "-" + startDatePicker.getDayOfMonth());
+                    }
+                })
+                .setNegativeButton("İptal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        filter.setStartDateFilterActive(false);
+                        startDatePickerButton.setText("Başlangıç Tarihi");
+                    }
+                })
+                ;
+
+        final AlertDialog.Builder builderend = new AlertDialog.Builder(getActivity());
+        builderend.setTitle("Bitiş Tarihi Seç")
+                .setView(endDatePicker)
+                .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        filter.setEndDateFilterActive(true);
+                        endDatePickerButton.setText("Başlangıç Tarihi: " +
+                                endDatePicker.getYear() + "-" + (endDatePicker.getMonth() + 1)
+                                + "-" + endDatePicker.getDayOfMonth());
+                    }
+                })
+                .setNegativeButton("İptal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        filter.setEndDateFilterActive(false);
+                        endDatePickerButton.setText("Başlangıç Tarihi");
+                    }
+                });
+
+        final AlertDialog dialogStart = builderstart.create();
+        final AlertDialog dialogEnd = builderend.create();
+
+        startDatePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogStart.show();
+            }
+        });
+
+        endDatePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogEnd.show();
+            }
+        });
+
         //TODO change date to today's date
-        startDatePicker.init(2015, 04, 12, new DatePicker.OnDateChangedListener() {
+        startDatePicker.init(2015, 03, 12, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 filter.getDate().setStartYear(year);
@@ -73,7 +143,7 @@ public class FilterFragment extends Fragment {
             }
         });
 
-        endDatePicker.init(2015, 04, 12, new DatePicker.OnDateChangedListener() {
+        endDatePicker.init(2015, 03, 12, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 filter.getDate().setEndYear(year);
@@ -89,7 +159,7 @@ public class FilterFragment extends Fragment {
         filtersAreOkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).filterEvents(filter);
+                ((MainActivity)getActivity()).applyFilter(filter);
             }
         });
 
@@ -104,6 +174,8 @@ public class FilterFragment extends Fragment {
                     R.layout.list_item_tag, tagList, false);
 
             CheckBox tag_name = (CheckBox) v.findViewById(R.id.tag_list_name);
+            tag_name.setChecked(true);
+            filter.getTags().add(t);
             tag_name.setText(t.getName());
 
             tag_name.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

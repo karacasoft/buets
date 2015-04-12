@@ -1,32 +1,36 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.kompesavengers.buets.fragments.FilterFragment"
-    android:orientation="vertical">
-
-    <DatePicker
-        android:id="@+id/filterDateStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </DatePicker>
-
-    <DatePicker
-        android:id="@+id/filterDateEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </DatePicker>
-
+    >
     <LinearLayout
-        android:id="@+id/tags_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <Button
+            android:id="@+id/filterStartDateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Başlangıç Tarihi" />
+        <Button
+            android:id="@+id/filterEndDateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bitiş Tarihi"/>
+
+        <LinearLayout
+            android:id="@+id/tags_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/filters_are_ok_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tamam"/>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/filters_are_ok_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tamam"/>
-
-</LinearLayout>
+</ScrollView>

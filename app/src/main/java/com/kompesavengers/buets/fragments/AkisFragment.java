@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kompesavengers.buets.MainActivity;
 import com.kompesavengers.buets.R;
 import com.kompesavengers.buets.api.EventsRequest;
+import com.kompesavengers.buets.api.ImageGetter;
 import com.kompesavengers.buets.api.Request;
 import com.kompesavengers.buets.model.Event;
 
@@ -136,12 +138,18 @@ public class AkisFragment extends Fragment {
             TextView eventDate = (TextView) v.findViewById(R.id.event_date);
             TextView eventDateEnd = (TextView) v.findViewById(R.id.event_date_end);
             TextView eventOrganizer = (TextView) v.findViewById(R.id.event_organizer);
+            ImageView eventImage = (ImageView) v.findViewById(R.id.event_list_logo);
             Button eventDetails = (Button) v.findViewById(R.id.event_details_button);
 
             eventTitle.setText(e.getName());
             eventDate.setText("Başlangıç Tarihi: " + e.getStartDate());
             eventDateEnd.setText("Bitiş Tarihi: " + e.getEndDate());
             eventOrganizer.setText(String.valueOf(e.getOrganizerId()));
+
+            ImageGetter imageGetter = new ImageGetter(getActivity())
+                    .setURL(ImageGetter.URL_PREFIX + e.getLogo_link() + ".png")
+                    .setImageView(eventImage);
+            imageGetter.execute();
 
             eventDetails.setOnClickListener(new View.OnClickListener() {
                 @Override

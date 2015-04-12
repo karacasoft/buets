@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,6 +26,7 @@ import com.kompesavengers.buets.api.EventsRequest;
 import com.kompesavengers.buets.api.Request;
 import com.kompesavengers.buets.api.TagsRequest;
 import com.kompesavengers.buets.fragments.AkisFragment;
+import com.kompesavengers.buets.fragments.FilterFragment;
 import com.kompesavengers.buets.fragments.SingleEventFragment;
 import com.kompesavengers.buets.model.Date;
 import com.kompesavengers.buets.model.Event;
@@ -32,6 +34,7 @@ import com.kompesavengers.buets.model.Filter;
 import com.kompesavengers.buets.model.Tag;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class MainActivity extends ActionBarActivity
@@ -50,24 +53,104 @@ public class MainActivity extends ActionBarActivity
         setMarkers(googleMap, events);
     }
 
+
+    public void applyFilter(Filter filter)
+    {
+        ArrayList<Event> filteredEvents = filterEvents(filter);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        mapFragment.getMap().clear();
+        fragmentManager.popBackStack();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, mapFragment)
+                .commit();
+
+        setMarkers(mapFragment.getMap(), filteredEvents);
+    }
+
     public ArrayList<Event> filterEvents(Filter filter)
     {
         ArrayList<Event> filteredEvents = new ArrayList<>();
 
-        for(Event e : events)
-            if(isBetween(filter.getDate(), new Date(e.getStartDate(),e.getEndDate())))
-                for(Tag t : filter.getTags())
-                    if(e.getTags().contains(t))
-                    {
-                        filteredEvents.add(e);
-                        break;
+        if(filter.isStartDateFilterActive())
+        {
+            if(filter.isEndDateFilterActive())
+            {
+                for(Event e : events) {
+                    if (isBetween(filter.getDate(), new Date(e.getStartDate(), e.getEndDate()))) {
+                        for (Tag t : filter.getTags()) {
+                            if (e.getTags().contains(t.getId())) {
+                                filteredEvents.add(e);
+                                break;
+                            }
+                        }
                     }
+                }
+            }else{
+                for(Event e : events) {
+                    if (isBetween(filter.getDate(), new Date(e.getStartDate(), e.getStartDate()))) {
+                        for (Tag t : filter.getTags()) {
+                            if (e.getTags().contains(t.getId())) {
+                                filteredEvents.add(e);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            if(filter.isEndDateFilterActive())
+            {
+                for(Event e : events) {
+                    if (isBetween(filter.getDate(), new Date(e.getEndDate(), e.getEndDate()))) {
+                        for (Tag t : filter.getTags()) {
+                            if (e.getTags().contains(t.getId())) {
+                                filteredEvents.add(e);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }else{
+                for(Event e : events) {
+                    for (Tag t : filter.getTags()) {
+                        if (e.getTags().contains(t.getId())) {
+                            filteredEvents.add(e);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+
 
         return filteredEvents;
     }
 
     public boolean isBetween(Date filter,Date date)
     {
+
+        Calendar c1 = Calendar.getInstance();
+        c1.set(filter.getStartYear(), filter.getStartMonth(), filter.getStartDay());
+
+        Calendar c2 = Calendar.getInstance();
+        c2.set(filter.getEndYear(), filter.getEndMonth(), filter.getEndDay());
+
+        Calendar c3 = Calendar.getInstance();
+        c3.set(date.getStartYear(), date.getStartMonth() - 1, date.getStartDay());
+
+        Calendar c4 = Calendar.getInstance();
+        c4.set(date.getEndYear(), date.getEndMonth() - 1, date.getEndDay());
+
+        if((c3.after(c1) && c3.before(c2)) || (c4.after(c1) && c4.before(c2)))
+        {
+            return true;
+        }
+        return false;
+
+    /*
         boolean dateEndFilterStart, dateStartFilterEnd;
 
         // date ends before filter begins FALSE
@@ -105,17 +188,18 @@ public class MainActivity extends ActionBarActivity
         if(dateEndFilterStart ||dateStartFilterEnd)
             return true;
         return false;
+        */
     }
 
     public ArrayList<Tag> getTags() {
         return tags;
     }
 
-        public void setMarkers(GoogleMap googleMap, ArrayList<Event> events)
+    public void setMarkers(GoogleMap googleMap, ArrayList<Event> events)
     {
         for (Event e : events)
         {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(e.getPlace().getCoordLat(), e.getPlace().getCoordLong()), 13));
+             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(e.getPlace().getCoordLat(), e.getPlace().getCoordLong()), 13));
 
              googleMap.addMarker(new MarkerOptions()
                     .title(e.getName())
@@ -128,8 +212,9 @@ public class MainActivity extends ActionBarActivity
     public void onEventClick(Event e) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+
         fragmentManager.beginTransaction()
-                .replace(R.id.container, SingleEventFragment.newInstance(e))
+                .replace(R.id.container, FilterFragment.newInstance())
                 .addToBackStack("list")
                 .commit();
     }
@@ -254,7 +339,24 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
+        ImageView filter = (ImageView) findViewById(R.id.filter_button);
 
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFilterView();
+            }
+        });
+
+    }
+
+    public void showFilterView()
+    {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, FilterFragment.newInstance())
+                .addToBackStack("filters")
+                .commit();
     }
 
     @Override
@@ -308,21 +410,6 @@ public class MainActivity extends ActionBarActivity
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**

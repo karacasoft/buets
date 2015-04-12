@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kompesavengers.buets.R;
+import com.kompesavengers.buets.api.ImageGetter;
 import com.kompesavengers.buets.model.Event;
 
 /**
@@ -74,6 +75,11 @@ public class SingleEventFragment extends Fragment {
         eventOrganizer.setText(String.valueOf(event.getOrganizerId()));
         eventDesc.setText(event.getDetail());
         eventURL.setText(event.getUrl());
+
+        ImageGetter imageGetter = new ImageGetter(getActivity())
+                .setURL(ImageGetter.URL_PREFIX + event.getLogo_link() + ".png")
+                .setImageView(eventLogo);
+        imageGetter.execute();
 
     }
 

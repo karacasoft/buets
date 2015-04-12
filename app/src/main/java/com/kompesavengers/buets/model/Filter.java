@@ -6,9 +6,28 @@ import java.util.ArrayList;
  * Created by Irmak on 12.4.2015.
  */
 public class Filter {
-    Date date;
+    private boolean startDateFilterActive;
+    private boolean endDateFilterActive;
 
-    ArrayList<Tag> tags;
+    public boolean isStartDateFilterActive() {
+        return startDateFilterActive;
+    }
+
+    public void setStartDateFilterActive(boolean startDateFilterActive) {
+        this.startDateFilterActive = startDateFilterActive;
+    }
+
+    public boolean isEndDateFilterActive() {
+        return endDateFilterActive;
+    }
+
+    public void setEndDateFilterActive(boolean endDateFilterActive) {
+        this.endDateFilterActive = endDateFilterActive;
+    }
+
+    Date date = new Date();
+
+    ArrayList<Tag> tags = new ArrayList<>();
 
     public Date getDate() {
         return date;

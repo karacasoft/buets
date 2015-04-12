@@ -44,6 +44,13 @@ public class EventsRequest extends Request {
                         e.setEndDate(current.getString("end_date"));
                         e.setUrl(current.getString("url"));
 
+                        JSONArray tags = current.getJSONArray("tags");
+                        for(int j = 0; j < tags.length(); j++)
+                        {
+                            int tag = tags.getInt(j);
+                            e.getTags().add(tag);
+                        }
+
                         events.add(e);
                     }
 

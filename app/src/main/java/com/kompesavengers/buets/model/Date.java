@@ -10,13 +10,16 @@ public class Date {
     int startDay, startMonth, startYear;
     int endDay, endMonth, endYear;
 
+    public Date()
+    {}
+
     public Date(String startDate, String endDate){
-        startDay = Integer.parseInt(startDate.substring(0,2));
-        startMonth = Integer.parseInt(startDate.substring(3,5));
-        startYear = Integer.parseInt(startDate.substring(6,10));
-        endDay = Integer.parseInt(startDate.substring(0,2));
-        endMonth = Integer.parseInt(startDate.substring(3,5));
-        endYear = Integer.parseInt(startDate.substring(6,10));
+        startDay = Integer.parseInt(startDate.substring(8,10));
+        startMonth = Integer.parseInt(startDate.substring(5,7));
+        startYear = Integer.parseInt(startDate.substring(0,4));
+        endDay = Integer.parseInt(endDate.substring(8,10));
+        endMonth = Integer.parseInt(endDate.substring(5,7));
+        endYear = Integer.parseInt(endDate.substring(0,4));
     }
 
     public int getStartDay() {
