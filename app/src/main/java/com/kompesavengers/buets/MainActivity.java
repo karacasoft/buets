@@ -27,6 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kompesavengers.buets.fragments.AkisFragment;
+import com.kompesavengers.buets.fragments.SingleEventFragment;
 import com.kompesavengers.buets.model.Event;
 import com.kompesavengers.buets.model.Place;
 
@@ -34,24 +35,32 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, OnMapReadyCallback {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        OnMapReadyCallback,
+        AkisFragment.OnEventClickListener
+    {
 
     private ArrayList<Event> events;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng sydney = new LatLng(-33.867, 151.206);
-
-        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
-
-        googleMap.addMarker(new MarkerOptions()
-                .title("Sydney")
-                .snippet("The most populous city in Australia.")
-                .position(sydney));
+        for (Event e : events)
+        {
+            //TODO place your markers RIGHT HERE Irmak :)
+        }
     }
 
-    private ArrayList<Event> getEvents()
+    @Override
+    public void onEventClick(Event e) {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, SingleEventFragment.newInstance(e))
+                .addToBackStack("list")
+                .commit();
+    }
+
+    private void getEvents()
     {
         ArrayList<Event> events = new ArrayList<Event>();
 
@@ -71,7 +80,8 @@ public class MainActivity extends ActionBarActivity
 
         events.add(event);
 
-        return events;
+        mapFragment.getMapAsync(this);
+
     }
 
     /**
@@ -120,8 +130,7 @@ public class MainActivity extends ActionBarActivity
         {
             case 0:
                 events = new ArrayList<Event>();
-                events = getEvents();
-
+                getEvents();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, mapFragment)
                         .commit();
