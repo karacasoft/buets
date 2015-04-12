@@ -44,9 +44,15 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        googleMap.setMyLocationEnabled(true);
         for (Event e : events)
         {
-            //TODO place your markers RIGHT HERE Irmak :)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(e.getPlace().getCoordLat(),e.getPlace().getCoordLong()), 13));
+
+            googleMap.addMarker(new MarkerOptions()
+                    .title(e.getName())
+                    .snippet(e.getStartDate())
+                    .position(new LatLng(e.getPlace().getCoordLat(),e.getPlace().getCoordLong())));
         }
     }
 
@@ -80,6 +86,7 @@ public class MainActivity extends ActionBarActivity
 
         events.add(event);
 
+        
         mapFragment.getMapAsync(this);
 
     }
