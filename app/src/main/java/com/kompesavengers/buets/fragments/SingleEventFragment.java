@@ -49,6 +49,16 @@ public class SingleEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_single_event, container, false);
+
+        initializeEvent(v);
+
+        //TODO get event logo
+
+        return v;
+    }
+
+    private void initializeEvent(View v)
+    {
         TextView eventTitle = (TextView) v.findViewById(R.id.single_event_title);
         TextView eventStartDate = (TextView) v.findViewById(R.id.single_event_date);
         TextView eventEndDate = (TextView) v.findViewById(R.id.single_event_date_end);
@@ -56,6 +66,7 @@ public class SingleEventFragment extends Fragment {
         TextView eventDesc = (TextView) v.findViewById(R.id.single_event_description);
         TextView eventURL = (TextView) v.findViewById(R.id.single_event_url);
         ImageView eventLogo = (ImageView) v.findViewById(R.id.single_event_logo);
+        ImageView eventBanner = (ImageView) v.findViewById(R.id.single_event_banner);
 
         eventTitle.setText(event.getName());
         eventStartDate.setText("Başlangıç Tarihi: " + event.getStartDate());
@@ -64,9 +75,6 @@ public class SingleEventFragment extends Fragment {
         eventDesc.setText(event.getDetail());
         eventURL.setText(event.getUrl());
 
-        //TODO get event logo
-
-        return v;
     }
 
     public Event getEvent() {

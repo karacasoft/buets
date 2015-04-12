@@ -1,5 +1,7 @@
 package com.kompesavengers.buets.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by triforce on 11/04/15.
  */
@@ -9,11 +11,15 @@ public class Event {
     private String name;
     private String detail;
     private int organizerId;
+    private Organizer organizer;
     private String startDate;
     private String endDate;
     private String url;
     private String logo_link;
+    private String banner_link;
+    private int placeId;
     private Place place;
+    private ArrayList<String> tags = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -45,6 +51,14 @@ public class Event {
 
     public void setOrganizerId(int organizerId) {
         this.organizerId = organizerId;
+    }
+
+    public Organizer getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer(Organizer organizer) {
+        this.organizer = organizer;
     }
 
     public String getStartDate() {
@@ -79,11 +93,31 @@ public class Event {
         this.logo_link = logo_link;
     }
 
+    public String getBanner_link() {
+        return banner_link;
+    }
+
+    public void setBanner_link(String banner_link) {
+        this.banner_link = banner_link;
+    }
+
+    public int getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(int placeId) {
+        this.placeId = placeId;
+    }
+
     public Place getPlace() {
         return place;
     }
 
     public void setPlace(Place place) {
         this.place = place;
+    }
+
+    public ArrayList<String> getTags() {
+        return tags;
     }
 }
