@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
+import android.opengl.Visibility;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,8 +47,9 @@ public class MainActivity extends ActionBarActivity
     {
 
     private ArrayList<Event> events;
+    private View spinner;
 
-    @Override
+        @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
         for (Event e : events)
@@ -77,15 +80,18 @@ public class MainActivity extends ActionBarActivity
                     @Override
                     public void onRequest() {
                         //TODO show loading icon
+                        spinnerVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onResult(int errorCode, final String errorString, ArrayList array) {
                         if(errorCode == 0) {
+                            events.clear();
                             events.addAll(array);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    spinnerVisibility(View.GONE);
                                     mapFragment.getMapAsync(MainActivity.this);
                                 }
                             });
@@ -100,6 +106,14 @@ public class MainActivity extends ActionBarActivity
                     }
                 });
         eventsRequest.execute();
+    }
+
+    public void spinnerVisibility(int visibility)
+    {
+        if(spinner == null)
+            spinner = findViewById(R.id.loadingLayout);
+
+        spinner.setVisibility(visibility);
     }
 
     public void showError(String title, String detail)

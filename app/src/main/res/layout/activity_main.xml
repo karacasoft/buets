@@ -13,4 +13,18 @@
         android:name="com.kompesavengers.buets.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer" />
 
+    <FrameLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#44000000">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+        </FrameLayout>
+
+
 </android.support.v4.widget.DrawerLayout>
