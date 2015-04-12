@@ -19,7 +19,7 @@ public class Event {
     private String banner_link;
     private int placeId;
     private Place place;
-    private ArrayList<String> tags = new ArrayList<>();
+    private ArrayList<Integer> tags = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -117,7 +117,7 @@ public class Event {
         this.place = place;
     }
 
-    public ArrayList<String> getTags() {
+    public ArrayList<Integer> getTags() {
         return tags;
     }
 }
