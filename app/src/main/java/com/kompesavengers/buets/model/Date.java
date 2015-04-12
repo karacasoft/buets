@@ -7,12 +7,8 @@ import com.google.android.gms.location.places.AutocompletePrediction;
  */
 public class Date {
 
-    int startDay;
-    int endDay;
-    int startMonth;
-    int endMonth;
-    int startYear;
-    int endYear;
+    int startDay, startMonth, startYear;
+    int endDay, endMonth, endYear;
 
     public Date(String startDate, String endDate){
         startDay = Integer.parseInt(startDate.substring(0,2));

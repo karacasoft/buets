@@ -26,6 +26,7 @@ import com.kompesavengers.buets.api.Request;
 import com.kompesavengers.buets.api.TagsRequest;
 import com.kompesavengers.buets.fragments.AkisFragment;
 import com.kompesavengers.buets.fragments.SingleEventFragment;
+import com.kompesavengers.buets.model.Date;
 import com.kompesavengers.buets.model.Event;
 import com.kompesavengers.buets.model.Filter;
 import com.kompesavengers.buets.model.Tag;
@@ -51,11 +52,31 @@ public class MainActivity extends ActionBarActivity
 
     public ArrayList<Event> filterEvents(Filter filter)
     {
+        ArrayList<Event> filteredEvents = new ArrayList<>();
 
-        return null;
+        for(Event e : events)
+            if(isBetween(filter.getDate(), new Date(e.getStartDate(),e.getEndDate())))
+                for(Tag t : filter.getTags())
+                    if(e.getTags().contains(t))
+                    {
+                        filteredEvents.add(e);
+                        break;
+                    }
+
+        return filteredEvents;
     }
 
-    public void setMarkers(GoogleMap googleMap, ArrayList<Event> events)
+    public boolean isBetween(Date filter,Date date)
+    {
+        //TODO isBetween
+        return true;
+    }
+
+    public ArrayList<Tag> getTags() {
+        return tags;
+    }
+
+        public void setMarkers(GoogleMap googleMap, ArrayList<Event> events)
     {
         for (Event e : events)
         {
