@@ -105,21 +105,24 @@ public class AkisFragment extends Fragment {
                         if(errorCode == 0) {
                             events.clear();
                             events.addAll(array);
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    populateView();
-                                    ((MainActivity)getActivity()).spinnerVisibility(View.GONE);
-                                }
-                            });
+                            if(getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        populateView();
+                                        ((MainActivity) getActivity()).spinnerVisibility(View.GONE);
+                                    }
+                                });
+                            }
                         }else{
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ((MainActivity)getActivity()).showError("Hata", errorString);
-                                }
-                            });
-
+                            if(getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ((MainActivity) getActivity()).showError("Hata", errorString);
+                                    }
+                                });
+                            }
                         }
                     }
                 });

@@ -72,7 +72,7 @@ public class SingleEventFragment extends Fragment {
         eventTitle.setText(event.getName());
         eventStartDate.setText("Başlangıç Tarihi: " + event.getStartDate());
         eventEndDate.setText("Bitiş Tarihi: " + event.getEndDate());
-        eventOrganizer.setText(String.valueOf(event.getOrganizerId()));
+        eventOrganizer.setText(event.getOrganizer_name());
         eventDesc.setText(event.getDetail());
         eventURL.setText(event.getUrl());
 

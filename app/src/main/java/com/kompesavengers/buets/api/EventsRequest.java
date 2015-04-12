@@ -43,6 +43,7 @@ public class EventsRequest extends Request {
                         e.setStartDate(current.getString("start_date"));
                         e.setEndDate(current.getString("end_date"));
                         e.setUrl(current.getString("url"));
+                        e.setOrganizer_name(current.getString("organizator_name"));
 
                         if(current.has("tags")) {
                             JSONArray tags = current.getJSONArray("tags");

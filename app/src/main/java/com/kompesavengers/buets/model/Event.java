@@ -20,6 +20,15 @@ public class Event {
     private int placeId;
     private Place place;
     private ArrayList<Integer> tags = new ArrayList<>();
+    private String organizer_name;
+
+    public String getOrganizer_name() {
+        return organizer_name;
+    }
+
+    public void setOrganizer_name(String organizer_name) {
+        this.organizer_name = organizer_name;
+    }
 
     public int getId() {
         return id;
