@@ -12,7 +12,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.kompesavengers.buets.MainActivity;
 import com.kompesavengers.buets.R;
+import com.kompesavengers.buets.api.EventsRequest;
+import com.kompesavengers.buets.api.Request;
 import com.kompesavengers.buets.model.Event;
 
 import java.util.ArrayList;
@@ -77,53 +80,47 @@ public class AkisFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.onEventClickListener = null;
+    }
+
     private void startFeedRequest()
     {
         //TODO: Dummy data will be used until web services are ready
 
-        Event e = new Event();
-        e.setId(0);
-        e.setName("Event1");
-        e.setDetail("Detail1");
-        e.setLogo_link("logo_link");
-        e.setStartDate("12.06.2015");
-        e.setEndDate("12.06.2015");
-        e.setOrganizerId(0);
+        EventsRequest eventsRequest = (EventsRequest) new EventsRequest()
+                .setCallback(new Request.RequestCallback() {
+                    @Override
+                    public void onRequest() {
+                        //TODO show loading icon
+                    }
 
-        Event e1 = new Event();
-        e1.setId(1);
-        e1.setName("Event2");
-        e1.setDetail("Detail2");
-        e1.setLogo_link("logo_link");
-        e1.setStartDate("12.06.2015");
-        e1.setEndDate("12.06.2015");
-        e1.setOrganizerId(0);
+                    @Override
+                    public void onResult(int errorCode, final String errorString, ArrayList array) {
+                        if(errorCode == 0) {
+                            events.clear();
+                            events.addAll(array);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    populateView();
+                                }
+                            });
+                        }else{
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ((MainActivity)getActivity()).showError("Hata", errorString);
+                                }
+                            });
 
-        Event e2 = new Event();
-        e2.setId(2);
-        e2.setName("Event3");
-        e2.setDetail("Detail3");
-        e2.setLogo_link("logo_link");
-        e2.setStartDate("12.06.2015");
-        e2.setEndDate("12.06.2015");
-        e2.setOrganizerId(0);
+                        }
+                    }
+                });
+        eventsRequest.execute();
 
-        Event e3 = new Event();
-        e3.setId(3);
-        e3.setName("Event4");
-        e3.setDetail("Detail4");
-        e3.setLogo_link("logo_link");
-        e3.setStartDate("12.06.2015");
-        e3.setEndDate("12.06.2015");
-        e3.setOrganizerId(0);
-
-
-        events.add(e);
-        events.add(e1);
-        events.add(e2);
-        events.add(e3);
-
-        populateView();
 
     }
 
