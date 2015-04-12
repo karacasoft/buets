@@ -1,6 +1,8 @@
 package com.kompesavengers.buets;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -47,7 +49,7 @@ public class MainActivity extends ActionBarActivity
         googleMap.setMyLocationEnabled(true);
         for (Event e : events)
         {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(e.getPlace().getCoordLat(),e.getPlace().getCoordLong()), 13));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(e.getPlace().getCoordLat(), e.getPlace().getCoordLong()), 13));
 
             googleMap.addMarker(new MarkerOptions()
                     .title(e.getName())
@@ -68,7 +70,7 @@ public class MainActivity extends ActionBarActivity
 
     private void getEvents()
     {
-        ArrayList<Event> events = new ArrayList<Event>();
+        events = new ArrayList<Event>();
 
         Event event = new Event();
         event.setId(1);
@@ -89,6 +91,23 @@ public class MainActivity extends ActionBarActivity
         
         mapFragment.getMapAsync(this);
 
+    }
+
+    public void showError(String title, String detail)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(detail)
+                .setTitle(title)
+                .setNeutralButton("OK.",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
     }
 
     /**
