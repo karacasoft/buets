@@ -39,17 +39,22 @@ public class MainActivity extends ActionBarActivity
     {
 
     private ArrayList<Event> events;
-    private ArrayList<Tag> tags;
+    private ArrayList<Tag> tags = new ArrayList<>();
     private View spinner;
 
         @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
+        setMarkers(googleMap, events);
+    }
+
+    public void setMarkers(GoogleMap googleMap, ArrayList<Event> events)
+    {
         for (Event e : events)
         {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(e.getPlace().getCoordLat(), e.getPlace().getCoordLong()), 13));
 
-            googleMap.addMarker(new MarkerOptions()
+             googleMap.addMarker(new MarkerOptions()
                     .title(e.getName())
                     .snippet(e.getStartDate())
                     .position(new LatLng(e.getPlace().getCoordLat(),e.getPlace().getCoordLong())));
@@ -80,17 +85,12 @@ public class MainActivity extends ActionBarActivity
                         if(errorCode == 0) {
                             events.clear();
                             events.addAll(array);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    spinnerVisibility(View.GONE);
-                                    mapFragment.getMapAsync(MainActivity.this);
-                                }
-                            });
+                            startTagsRequest();
                         } else{
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    spinnerVisibility(View.GONE);
                                     showError("Hata", errorString);
                                 }
                             });
@@ -113,10 +113,20 @@ public class MainActivity extends ActionBarActivity
                         {
                             tags.clear();
                             tags.addAll(array);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    spinnerVisibility(View.GONE);
+                                    mapFragment.getMapAsync(MainActivity.this);
+                                }
+                            });
+
                         }else{
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    spinnerVisibility(View.GONE);
                                     showError("Hata", errorString);
                                 }
                             });
