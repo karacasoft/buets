@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,12 +48,14 @@ public class MainActivity extends ActionBarActivity
         googleMap.setMyLocationEnabled(true);
         for (Event e : events)
         {
+            Log.i("event place",e.getPlace().getCoordLat() + ", " + e.getPlace().getCoordLong());
+            Log.i("event name",e.getName());
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(e.getPlace().getCoordLat(),e.getPlace().getCoordLong()), 13));
 
             googleMap.addMarker(new MarkerOptions()
                     .title(e.getName())
                     .snippet(e.getStartDate())
-                    .position(new LatLng(e.getPlace().getCoordLat(),e.getPlace().getCoordLong())));
+                    .position(new LatLng(e.getPlace().getCoordLat(), e.getPlace().getCoordLong())));
         }
     }
 
@@ -68,7 +71,7 @@ public class MainActivity extends ActionBarActivity
 
     private void getEvents()
     {
-        ArrayList<Event> events = new ArrayList<Event>();
+        events = new ArrayList<Event>();
 
         Event event = new Event();
         event.setId(1);
@@ -79,14 +82,14 @@ public class MainActivity extends ActionBarActivity
         event.setOrganizerId(1);
         Place place = new Place();
         place.setName("GKM");
-        place.setCoordLat(41.085852F);
-        place.setCoordLong(29.039144F);
+        place.setCoordLat(41.085996F);
+        place.setCoordLong(29.039305F);
         event.setPlace(place);
         event.setUrl("compec.boun.edu.tr/exit15");
 
         events.add(event);
 
-        
+
         mapFragment.getMapAsync(this);
 
     }
