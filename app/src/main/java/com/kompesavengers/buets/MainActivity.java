@@ -60,6 +60,9 @@ public class MainActivity extends ActionBarActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
+        if(mapFragment == null)
+            mapFragment = new SupportMapFragment();
+
         mapFragment.getMap().clear();
         fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
