@@ -2,6 +2,7 @@ package com.kompesavengers.buets.fragments;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -94,7 +95,7 @@ public class AkisFragment extends Fragment {
                 .setCallback(new Request.RequestCallback() {
                     @Override
                     public void onRequest() {
-                        //TODO show loading icon
+                        ((MainActivity)getActivity()).spinnerVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -106,6 +107,7 @@ public class AkisFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     populateView();
+                                    ((MainActivity)getActivity()).spinnerVisibility(View.GONE);
                                 }
                             });
                         }else{
