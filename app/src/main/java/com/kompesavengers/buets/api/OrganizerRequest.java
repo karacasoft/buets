@@ -33,7 +33,7 @@ public class OrganizerRequest extends Request{
 
                         o.setId(current.getInt("id"));
                         o.setName(current.getString("name"));
-                        //TODO
+                        o.setLogoName(current.getString("logo_name"));
 
                         organizers.add(o);
                     }

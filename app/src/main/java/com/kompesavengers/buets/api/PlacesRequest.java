@@ -33,7 +33,11 @@ public class PlacesRequest extends Request {
 
                         p.setId(current.getInt("id"));
                         p.setName(current.getString("name"));
-                        //TODO
+                        String[] latnlong = current.getString("coordinates").split(", ");
+                        String lat = latnlong[0];
+                        String lon = latnlong[1];
+                        p.setCoordLat(Float.valueOf(lat));
+                        p.setCoordLong(Float.valueOf(lon));
 
                         places.add(p);
                     }

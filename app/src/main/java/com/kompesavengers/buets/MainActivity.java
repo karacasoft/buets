@@ -28,6 +28,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.kompesavengers.buets.api.EventsRequest;
+import com.kompesavengers.buets.api.Request;
 import com.kompesavengers.buets.fragments.AkisFragment;
 import com.kompesavengers.buets.fragments.SingleEventFragment;
 import com.kompesavengers.buets.model.Event;
@@ -70,27 +72,34 @@ public class MainActivity extends ActionBarActivity
 
     private void getEvents()
     {
-        events = new ArrayList<Event>();
+        EventsRequest eventsRequest = (EventsRequest) new EventsRequest()
+                .setCallback(new Request.RequestCallback() {
+                    @Override
+                    public void onRequest() {
+                        //TODO show loading icon
+                    }
 
-        Event event = new Event();
-        event.setId(1);
-        event.setDetail("burası detay");
-        event.setName("bilişim ödü");
-        event.setStartDate("09.04.2015");
-        event.setEndDate("12.04.2015");
-        event.setOrganizerId(1);
-        Place place = new Place();
-        place.setName("GKM");
-        place.setCoordLat(41.085852F);
-        place.setCoordLong(29.039144F);
-        event.setPlace(place);
-        event.setUrl("compec.boun.edu.tr/exit15");
-
-        events.add(event);
-
-        
-        mapFragment.getMapAsync(this);
-
+                    @Override
+                    public void onResult(int errorCode, final String errorString, ArrayList array) {
+                        if(errorCode == 0) {
+                            events.addAll(array);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mapFragment.getMapAsync(MainActivity.this);
+                                }
+                            });
+                        } else{
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showError("Hata", errorString);
+                                }
+                            });
+                        }
+                    }
+                });
+        eventsRequest.execute();
     }
 
     public void showError(String title, String detail)
@@ -99,7 +108,7 @@ public class MainActivity extends ActionBarActivity
 
         builder.setMessage(detail)
                 .setTitle(title)
-                .setNeutralButton("OK.",new DialogInterface.OnClickListener() {
+                .setNeutralButton("OK.", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         return;

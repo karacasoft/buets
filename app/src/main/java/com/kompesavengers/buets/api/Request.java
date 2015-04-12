@@ -2,6 +2,7 @@ package com.kompesavengers.buets.api;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,6 +34,18 @@ public abstract class Request {
         String result = convertInputStreamToString(stream);
 
         JSONArray json = new JSONArray(result);
+
+        return json;
+    }
+
+    protected JSONObject startRequestJSONObject(String urlString) throws IOException, JSONException {
+        URL url = new URL(urlString);
+
+        InputStream stream = url.openConnection().getInputStream();
+
+        String result = convertInputStreamToString(stream);
+
+        JSONObject json = new JSONObject(result);
 
         return json;
     }
