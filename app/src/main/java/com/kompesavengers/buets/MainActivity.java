@@ -27,6 +27,7 @@ import com.kompesavengers.buets.api.TagsRequest;
 import com.kompesavengers.buets.fragments.AkisFragment;
 import com.kompesavengers.buets.fragments.SingleEventFragment;
 import com.kompesavengers.buets.model.Event;
+import com.kompesavengers.buets.model.Filter;
 import com.kompesavengers.buets.model.Tag;
 
 import java.util.ArrayList;
@@ -46,6 +47,12 @@ public class MainActivity extends ActionBarActivity
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
         setMarkers(googleMap, events);
+    }
+
+    public ArrayList<Event> filterEvents(Filter filter)
+    {
+
+        return null;
     }
 
     public void setMarkers(GoogleMap googleMap, ArrayList<Event> events)
