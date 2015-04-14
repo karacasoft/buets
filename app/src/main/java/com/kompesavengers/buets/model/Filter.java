@@ -9,6 +9,10 @@ public class Filter {
     private boolean startDateFilterActive;
     private boolean endDateFilterActive;
 
+    private DateFilter dateFilter = new DateFilter();
+
+    private ArrayList<Tag> tags = new ArrayList<>();
+
     public boolean isStartDateFilterActive() {
         return startDateFilterActive;
     }
@@ -25,16 +29,12 @@ public class Filter {
         this.endDateFilterActive = endDateFilterActive;
     }
 
-    Date date = new Date();
-
-    ArrayList<Tag> tags = new ArrayList<>();
-
-    public Date getDate() {
-        return date;
+    public DateFilter getDateFilter() {
+        return dateFilter;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateFilter(DateFilter dateFilter) {
+        this.dateFilter = dateFilter;
     }
 
     public ArrayList<Tag> getTags() {

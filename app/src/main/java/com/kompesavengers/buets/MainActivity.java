@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
@@ -28,7 +27,7 @@ import com.kompesavengers.buets.api.TagsRequest;
 import com.kompesavengers.buets.fragments.AkisFragment;
 import com.kompesavengers.buets.fragments.FilterFragment;
 import com.kompesavengers.buets.fragments.SingleEventFragment;
-import com.kompesavengers.buets.model.Date;
+import com.kompesavengers.buets.model.DateFilter;
 import com.kompesavengers.buets.model.Event;
 import com.kompesavengers.buets.model.Filter;
 import com.kompesavengers.buets.model.Tag;
@@ -46,13 +45,6 @@ public class MainActivity extends ActionBarActivity
     private ArrayList<Event> events;
     private ArrayList<Tag> tags = new ArrayList<>();
     private View spinner;
-
-        @Override
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap.setMyLocationEnabled(true);
-        setMarkers(googleMap, events);
-    }
-
 
     public void applyFilter(Filter filter)
     {
@@ -81,7 +73,7 @@ public class MainActivity extends ActionBarActivity
             if(filter.isEndDateFilterActive())
             {
                 for(Event e : events) {
-                    if (isBetween(filter.getDate(), new Date(e.getStartDate(), e.getEndDate()))) {
+                    if (isBetween(filter.getDateFilter(), DateFilter.parseFromStrings(e.getStartDate(), e.getEndDate()))) {
                         for (Tag t : filter.getTags()) {
                             if (e.getTags().contains(t.getId())) {
                                 filteredEvents.add(e);
@@ -92,7 +84,7 @@ public class MainActivity extends ActionBarActivity
                 }
             }else{
                 for(Event e : events) {
-                    if (isBetween(filter.getDate(), new Date(e.getStartDate(), e.getStartDate()))) {
+                    if (isBetween(filter.getDateFilter(), DateFilter.parseFromStrings(e.getStartDate(), e.getStartDate()))) {
                         for (Tag t : filter.getTags()) {
                             if (e.getTags().contains(t.getId())) {
                                 filteredEvents.add(e);
@@ -106,7 +98,7 @@ public class MainActivity extends ActionBarActivity
             if(filter.isEndDateFilterActive())
             {
                 for(Event e : events) {
-                    if (isBetween(filter.getDate(), new Date(e.getEndDate(), e.getEndDate()))) {
+                    if (isBetween(filter.getDateFilter(), DateFilter.parseFromStrings(e.getEndDate(), e.getEndDate()))) {
                         for (Tag t : filter.getTags()) {
                             if (e.getTags().contains(t.getId())) {
                                 filteredEvents.add(e);
@@ -132,7 +124,7 @@ public class MainActivity extends ActionBarActivity
         return filteredEvents;
     }
 
-    public boolean isBetween(Date filter,Date date)
+    public boolean isBetween(DateFilter filter,DateFilter dateFilter)
     {
 
         Calendar c1 = Calendar.getInstance();
@@ -142,56 +134,16 @@ public class MainActivity extends ActionBarActivity
         c2.set(filter.getEndYear(), filter.getEndMonth(), filter.getEndDay());
 
         Calendar c3 = Calendar.getInstance();
-        c3.set(date.getStartYear(), date.getStartMonth() - 1, date.getStartDay());
+        c3.set(dateFilter.getStartYear(), dateFilter.getStartMonth() - 1, dateFilter.getStartDay());
 
         Calendar c4 = Calendar.getInstance();
-        c4.set(date.getEndYear(), date.getEndMonth() - 1, date.getEndDay());
+        c4.set(dateFilter.getEndYear(), dateFilter.getEndMonth() - 1, dateFilter.getEndDay());
 
         if((c3.after(c1) && c3.before(c2)) || (c4.after(c1) && c4.before(c2)))
         {
             return true;
         }
         return false;
-
-    /*
-        boolean dateEndFilterStart, dateStartFilterEnd;
-
-        // date ends before filter begins FALSE
-        if(filter.getStartYear() > date.getEndYear())
-            dateEndFilterStart = false;
-        else if(filter.getStartYear() < date.getEndYear())
-            dateEndFilterStart = true;
-        else if(filter.getStartMonth() > date.getEndMonth())//same year
-            dateEndFilterStart = false;
-        else if(filter.getStartMonth() < date.getEndMonth())
-            dateEndFilterStart = true;
-        else if(filter.getStartDay() > date.getEndDay())//same month
-            dateEndFilterStart = false;
-        else if(filter.getStartDay() < date.getEndDay())
-            dateEndFilterStart = true;
-        else //same day
-            dateEndFilterStart = true;
-
-        // date starts after filter ends
-        if(date.getStartDay() > filter.getEndYear())
-            dateStartFilterEnd = false;
-        else if(date.getStartYear() < filter.getEndYear())
-            dateStartFilterEnd = true;
-        else if(date.getStartMonth() > filter.getEndMonth())//same year
-            dateStartFilterEnd = false;
-        else if(date.getStartMonth() < filter.getEndMonth())
-            dateStartFilterEnd = true;
-        else if(date.getStartDay() > filter.getEndDay())//same month
-            dateStartFilterEnd= false;
-        else if(date.getStartDay() < filter.getEndDay())
-            dateStartFilterEnd = true;
-        else //same day
-            dateStartFilterEnd = true;
-
-        if(dateEndFilterStart ||dateStartFilterEnd)
-            return true;
-        return false;
-        */
     }
 
     public ArrayList<Tag> getTags() {
@@ -322,6 +274,7 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
     private SupportMapFragment mapFragment;
+    private ImageView filterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -342,9 +295,9 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        ImageView filter = (ImageView) findViewById(R.id.filter_button);
+        filterButton = (ImageView) findViewById(R.id.filter_button);
 
-        filter.setOnClickListener(new View.OnClickListener() {
+        filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFilterView();
@@ -353,13 +306,18 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    public void showFilterView()
+    private void showFilterView()
     {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, FilterFragment.newInstance())
                 .addToBackStack("filters")
                 .commit();
+    }
+
+    public void setFilterButtonVisibility(int visibility)
+    {
+        filterButton.setVisibility(visibility);
     }
 
     @Override
@@ -391,7 +349,7 @@ public class MainActivity extends ActionBarActivity
                         .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                         .commit();
         }
-
+        restoreActionBar();
     }
 
     public void onSectionAttached(int number) {
@@ -413,6 +371,12 @@ public class MainActivity extends ActionBarActivity
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.setMyLocationEnabled(true);
+        setMarkers(googleMap, events);
     }
 
     /**

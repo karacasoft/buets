@@ -6,12 +6,10 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -23,7 +21,6 @@ import com.kompesavengers.buets.model.Filter;
 import com.kompesavengers.buets.model.Tag;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -137,18 +134,18 @@ public class FilterFragment extends Fragment {
         startDatePicker.init(2015, 03, 12, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                filter.getDate().setStartYear(year);
-                filter.getDate().setStartMonth(monthOfYear);
-                filter.getDate().setStartDay(dayOfMonth);
+                filter.getDateFilter().setStartYear(year);
+                filter.getDateFilter().setStartMonth(monthOfYear);
+                filter.getDateFilter().setStartDay(dayOfMonth);
             }
         });
 
         endDatePicker.init(2015, 03, 12, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                filter.getDate().setEndYear(year);
-                filter.getDate().setEndMonth(monthOfYear);
-                filter.getDate().setEndDay(dayOfMonth);
+                filter.getDateFilter().setEndYear(year);
+                filter.getDateFilter().setEndMonth(monthOfYear);
+                filter.getDateFilter().setEndDay(dayOfMonth);
             }
         });
 

@@ -40,26 +40,21 @@ public class ImageGetter {
 
     public void execute()
     {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    InputStream stream = new URL(url).openStream();
-                    final Bitmap bmp = BitmapFactory.decodeStream(stream);
-                    if(imageView != null)
-                    {
-                        ((Activity) context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                imageView.setImageBitmap(bmp);
-                            }
-                        });
+        try {
+            InputStream stream = new URL(url).openStream();
+            final Bitmap bmp = BitmapFactory.decodeStream(stream);
+            if(imageView != null)
+            {
+                ((Activity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(bmp);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                });
             }
-        }).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

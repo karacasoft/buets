@@ -1,25 +1,26 @@
 package com.kompesavengers.buets.model;
 
-import com.google.android.gms.location.places.AutocompletePrediction;
-
 /**
  * Created by Irmak on 12.4.2015.
  */
-public class Date {
+public class DateFilter {
 
     int startDay, startMonth, startYear;
     int endDay, endMonth, endYear;
 
-    public Date()
+    public DateFilter()
     {}
 
-    public Date(String startDate, String endDate){
-        startDay = Integer.parseInt(startDate.substring(8,10));
-        startMonth = Integer.parseInt(startDate.substring(5,7));
-        startYear = Integer.parseInt(startDate.substring(0,4));
-        endDay = Integer.parseInt(endDate.substring(8,10));
-        endMonth = Integer.parseInt(endDate.substring(5,7));
-        endYear = Integer.parseInt(endDate.substring(0,4));
+    public static DateFilter parseFromStrings(String startDate, String endDate)
+    {
+        DateFilter filter = new DateFilter();
+        filter.startDay = Integer.parseInt(startDate.substring(8,10));
+        filter.startMonth = Integer.parseInt(startDate.substring(5,7));
+        filter.startYear = Integer.parseInt(startDate.substring(0,4));
+        filter.endDay = Integer.parseInt(endDate.substring(8,10));
+        filter.endMonth = Integer.parseInt(endDate.substring(5,7));
+        filter.endYear = Integer.parseInt(endDate.substring(0,4));
+        return filter;
     }
 
     public int getStartDay() {
