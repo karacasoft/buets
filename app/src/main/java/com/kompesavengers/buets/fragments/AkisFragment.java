@@ -41,7 +41,6 @@ public class AkisFragment extends Fragment {
      *
      * @return A new instance of fragment AkisFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AkisFragment newInstance() {
         AkisFragment fragment = new AkisFragment();
         return fragment;
